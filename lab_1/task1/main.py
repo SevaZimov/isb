@@ -45,8 +45,8 @@ def main() -> None:
         encrypted_text = encrypt_text(text, key)
         save_result(args.output, encrypted_text)
         print(f"Текст успешно зашифрован и сохранен в {args.output}")
-    except Exception:
-        print("Проверьте входные данные и попробуйте снова.")
+    except Exception as e:
+        print(f"Произошла ошибка {str(e)}")
 
 
 if __name__ == "__main__":

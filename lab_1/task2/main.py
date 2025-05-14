@@ -1,7 +1,7 @@
 import argparse
 from argparse import Namespace
 import json
-from dec import decode_text, make_key, count_chars, load_frequencies
+from dec import decode_text, make_key, count_chars, load_frequencies, save_key_to_json
 
 
 def setup_arg_parser() -> Namespace:
@@ -59,12 +59,11 @@ def main() -> None:
         key = make_key(encrypted_counts, frequencies)
         decrypted_text = decode_text(encrypted_text, key)
         save_result(args.output, decrypted_text)
-        with open(args.key, 'w', encoding='utf-8') as f:
-            json.dump(key, f, ensure_ascii=False, indent=4)
+        save_key_to_json(key, args.key)
         print(f"Успешно! Дешифрованный текст сохранен в {args.output}")
         print(f"Ключ шифрования сохранен в {args.key}")
-    except Exception:
-        print("Проверьте входные данные и попробуйте снова.")
+    except Exception as e:
+        print(f"Произошла ошибка {str(e)}")
 
 
 if __name__ == "__main__":
