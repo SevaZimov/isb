@@ -56,8 +56,7 @@ def main() -> None:
         frequencies = load_frequencies(args.frequency)
         encrypted_text = read_file(args.input)
         encrypted_counts = count_chars(encrypted_text)
-        ####key = make_key(encrypted_counts, frequencies)
-        key = load_frequencies(args.key)
+        key = make_key(encrypted_counts, frequencies)
         decrypted_text = decode_text(encrypted_text, key)
         save_result(args.output, decrypted_text)
         with open(args.key, 'w', encoding='utf-8') as f:
