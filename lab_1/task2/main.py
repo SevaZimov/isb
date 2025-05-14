@@ -64,14 +64,8 @@ def main() -> None:
             json.dump(key, f, ensure_ascii=False, indent=4)
         print(f"Успешно! Дешифрованный текст сохранен в {args.output}")
         print(f"Ключ шифрования сохранен в {args.key}")
-    except FileNotFoundError as e:
-        print(f"Ошибка: Файл не найден - {e.filename}")
-    except json.JSONDecodeError:
-        print("Ошибка: Некорректный формат JSON-файла")
-    except ValueError as e:
-        print(f"Ошибка в данных: {str(e)}")
-    except Exception as e:
-        print(f"Неожиданная ошибка: {str(e)}")
+    except Exception:
+        print("Проверьте входные данные и попробуйте снова.")
 
 
 if __name__ == "__main__":
