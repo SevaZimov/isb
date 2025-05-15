@@ -28,26 +28,36 @@ def load_sequences(file_path: str) -> dict[str, str]:
     with open(file_path, 'r', encoding='utf-8') as f:
         sequences = json.load(f)
     if not isinstance(sequences, dict):
-        raise ValueError("Файл последовательностей должен содержать JSON-объект")
+        raise ValueError("Файл последовательностей должен "
+                         "содержать JSON-объект")
     for lang, seq in sequences.items():
         if not isinstance(seq, str):
-            raise ValueError(f"Последовательность для {lang} должна быть строкой")
+            raise ValueError(f"Последовательность для "
+                             f"{lang} должна быть строкой")
 
         if len(seq) != 128:
             raise ValueError(
-                f"Последовательность для {lang} должна содержать ровно 128 бит. "
+                f"Последовательность для {lang} должна "
+                f"содержать ровно 128 бит. "
                 f"Получено: {len(seq)}"
             )
 
         if not all(c in '01' for c in seq):
             raise ValueError(
-                f"Последовательность для {lang} содержит недопустимые символы. "
+                f"Последовательность для {lang} "
+                f"содержит недопустимые символы. "
                 "Допустимы только '0' и '1'"
             )
     return sequences
 
 
 def main() -> None:
+    """
+    Основная функция, запускающая тесты NIST
+    для побитовых последовательностей
+    сгенерированных с использованием стандартных
+    ГСПЧ из Java и C++
+    """
     try:
         args = setup_arg_parser()
         sequences = load_sequences(args.sequences)
@@ -57,17 +67,22 @@ def main() -> None:
 
             # Тест на частоту битов
             p_freq = freq_bit_test(sequence)
-            print(f"1. Тест на частоту битов: P = {p_freq:.6f}")
+            print(f"1. Тест на частоту битов: "
+                  f"P = {p_freq:.6f}")
 
             # Тест на идентичные последовательности
             p_identical = identical_consecutive_test(sequence)
-            print(f"2. Тест на идентичные последовательности: P = {p_identical:.6f}")
+            print(f"2. Тест на идентичные последовательности: "
+                  f"P = {p_identical:.6f}")
 
             # Тест на максимальные последовательности единиц
             x_square = most_ones_seq_test(sequence)
-            print(f"3. Тест на максимальные последовательности единиц: χ^2 = {x_square:.6f}")
+            print(f"3. Тест на максимальные последовательности единиц: "
+                  f"χ^2 = {x_square:.6f}")
     except ValueError as e:
         print(f"Ошибка загрузки файла: {e}")
+    except Exception as e:
+        print(f"Произошла непредвиденная ошибка: {e}")
 
 
 if __name__ == "__main__":

@@ -9,7 +9,8 @@ def freq_bit_test(sequence: str) -> float:
     :param sequence: Битовая строка для тестирования
     :return: P значение теста
     """
-    s_n = (sequence.count("1") - sequence.count("0")) / math.sqrt(len(sequence))
+    s_n = ((sequence.count("1") - sequence.count("0"))
+           / math.sqrt(len(sequence)))
     p = math.erfc(abs(s_n) / math.sqrt(2))
     return p
 
