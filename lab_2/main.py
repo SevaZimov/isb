@@ -61,21 +61,14 @@ def main() -> None:
     try:
         args = setup_arg_parser()
         sequences = load_sequences(args.sequences)
-
         for language, sequence in sequences.items():
             print(f"\nРезультаты тестов для {language}:")
-
-            # Тест на частоту битов
             p_freq = freq_bit_test(sequence)
             print(f"1. Тест на частоту битов: "
                   f"P = {p_freq:.6f}")
-
-            # Тест на идентичные последовательности
             p_identical = identical_consecutive_test(sequence)
             print(f"2. Тест на идентичные последовательности: "
                   f"P = {p_identical:.6f}")
-
-            # Тест на максимальные последовательности единиц
             x_square = most_ones_seq_test(sequence)
             print(f"3. Тест на максимальные последовательности единиц: "
                   f"χ^2 = {x_square:.6f}")
