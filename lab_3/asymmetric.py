@@ -1,6 +1,7 @@
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPublicKey
+from cryptography.hazmat.primitives.asymmetric.rsa import (RSAPrivateKey,
+                                                           RSAPublicKey)
 
 
 def gen_asym_keys() -> tuple[RSAPrivateKey, RSAPublicKey]:
@@ -67,11 +68,13 @@ def load_asym_keys(private_key_path: str, public_key_path: str) -> tuple:
     return private_key, public_key
 
 
-def serialize_asym_keys(private_key: RSAPrivateKey, public_key: RSAPublicKey) -> tuple:
+def serialize_asym_keys(private_key: RSAPrivateKey,
+                        public_key: RSAPublicKey) -> tuple:
     """Сериализует RSA ключи в PEM формат.
     :param private_key: Приватный ключ для сериализации
     :param public_key: Публичный ключ для сериализации
-    :return: Кортеж (сериализованный_приватный_ключ, сериализованный_публичный_ключ)
+    :return: Кортеж (сериализованный_приватный_ключ,
+    сериализованный_публичный_ключ)
     """
     private_pem = private_key.private_bytes(
         encoding=serialization.Encoding.PEM,
