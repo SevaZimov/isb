@@ -1,4 +1,3 @@
-# tests.py
 import math
 
 
@@ -35,17 +34,19 @@ def identical_consecutive_test(sequence: str) -> float:
     return p
 
 
-def most_ones_seq_test(sequence: str) -> float:
+def most_ones_seq_test(sequence: str, block : int, pi : list[float]) -> float:
     """
     Тест на самую длинную последовательность единиц в блоке.
+    :param pi: Список вероятностных констант
+    :param block: Размер блока
     :param sequence: Битовая строка для тестирования
     :return: Значение статистики χ² (хи-квадрат)
     для последующего получения P на стороннем сайте
     """
-    pi = [0.2148, 0.3672, 0.2305, 0.1875]
+
     stat = {"v1": 0, "v2": 0, "v3": 0, "v4": 0}
-    for i in range(0, 119, 8):
-        sub_seq = sequence[i:i + 8]
+    for i in range(0, len(sequence), block):
+        sub_seq = sequence[i:i + block]
         one_dupl = "1"
         while one_dupl in sub_seq:
             one_dupl += "1"

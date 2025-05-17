@@ -1,4 +1,3 @@
-# main.py
 import json
 import argparse
 from argparse import Namespace
@@ -15,7 +14,26 @@ def setup_arg_parser() -> Namespace:
         'sequences',
         help="Путь к JSON-файлу с побитовыми последовательностями"
     )
+    parser.add_argument(
+        'consts',
+        help="Путь к JSON-файлу с константами"
+    )
     return parser.parse_args()
+
+
+def load_consts(file_path: str) -> dict[str, str]:
+    """Загружает константы из JSON-файла.
+
+    :param file_path: Путь к JSON-файлу с
+    константами
+    :return: Словарь с константами
+    """
+    with open(file_path, 'r', encoding='utf-8') as f:
+        consts = json.load(f)
+    if not isinstance(consts, dict):
+        raise ValueError("Файл последовательностей должен "
+                         "содержать JSON-объект")
+    return consts
 
 
 def load_sequences(file_path: str) -> dict[str, str]:
@@ -61,6 +79,9 @@ def main() -> None:
     try:
         args = setup_arg_parser()
         sequences = load_sequences(args.sequences)
+        consts = load_consts(args.consts)
+        block_len = int(consts["block"])
+        pi = list(map(float,consts["pi"].split(',')))
         for language, sequence in sequences.items():
             print(f"\nРезультаты тестов для {language}:")
             p_freq = freq_bit_test(sequence)
@@ -69,7 +90,7 @@ def main() -> None:
             p_identical = identical_consecutive_test(sequence)
             print(f"2. Тест на идентичные последовательности: "
                   f"P = {p_identical:.6f}")
-            x_square = most_ones_seq_test(sequence)
+            x_square = most_ones_seq_test(sequence, block_len ,pi)
             print(f"3. Тест на максимальные последовательности единиц: "
                   f"χ^2 = {x_square:.6f}")
     except ValueError as e:
