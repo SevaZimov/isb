@@ -43,11 +43,14 @@ def json_loader(path: str, mode: int) -> Dict[str, Any]:
             if 'key_len' not in config:
                 raise ValueError("Отсутствует параметр 'key_len'")
             if config['key_len'] not in ('128', '192', '256'):
-                raise ValueError("Недопустимая длина ключа. Допустимые значения: '128', '192', '256'")
+                raise ValueError("Недопустимая длина ключа. "
+                                 "Допустимые значения: '128', '192', '256'")
         case 2:
-            required_paths = {'symmetric_key', 'secret_key', 'initial_file', 'encrypted_file'}
+            required_paths = {'symmetric_key', 'secret_key',
+                              'initial_file', 'encrypted_file'}
         case 3:
-            required_paths = {'symmetric_key', 'secret_key', 'decrypted_file', 'encrypted_file'}
+            required_paths = {'symmetric_key', 'secret_key',
+                              'decrypted_file', 'encrypted_file'}
             if 'key_len' not in config:
                 raise ValueError("Отсутствует параметр 'key_len'")
         case _:
