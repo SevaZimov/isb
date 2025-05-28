@@ -1,3 +1,6 @@
+import os
+
+
 def save_binary(path: str, data: bytes) -> None:
     """
     Сохраняет binary файл
@@ -5,8 +8,11 @@ def save_binary(path: str, data: bytes) -> None:
     :param path: Путь к файлу
     :return:
     """
-    with open(path, 'wb') as f:
-        f.write(data)
+    try:
+        with open(path, 'wb') as f:
+            f.write(data)
+    except (OSError, TypeError) as e:
+        raise IOError(f"Ошибка сохранения файла: {e}")
 
 def read_binary(path: str) -> bytes:
     """
@@ -14,6 +20,8 @@ def read_binary(path: str) -> bytes:
     :param path: Путь к файлу
     :return:
     """
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Файл не найден: {path}")
     with open(path, 'rb') as f:
         return f.read()
 
@@ -24,8 +32,11 @@ def save_txt(path: str, content: str) -> None:
     :param content: Данные для записи
     :return:
     """
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write(content)
+    try:
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(content)
+    except (OSError, TypeError) as e:
+        raise IOError(f"Ошибка сохранения файла: {e}")
 
 def read_txt(path: str) -> str:
     """
@@ -33,5 +44,7 @@ def read_txt(path: str) -> str:
     :param path: Путь к файлу
     :return:
     """
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Файл не найден: {path}")
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()

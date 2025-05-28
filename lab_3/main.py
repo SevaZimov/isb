@@ -22,10 +22,9 @@ def setup_arg_parser() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def json_loader(path: str, mode: int) -> Dict[str, Any]:
-    """Загружает и проверяет JSON-файл с настройками шифрования.
+def json_loader(path: str) -> Dict[str, Any]:
+    """Загружает и проверяет JSON-файл с настройками.
     :param path: Путь к JSON-файлу конфигурации.
-    :param mode: Режим работы программы (1, 2 или 3).
     :return: Словарь с загруженными настройками.
     """
     if not Path(path).exists():
@@ -37,6 +36,14 @@ def json_loader(path: str, mode: int) -> Dict[str, Any]:
     if 'paths' not in config:
         raise ValueError("Отсутствует секция 'paths' в конфиге")
 
+    return config
+
+
+def mode_setup(config: Dict[str, Any], mode: int) -> None:
+    """Проверяет конфигурацию для выбранного режима работы.
+    :param config: Загруженная конфигурация
+    :param mode: Режим работы программы (1, 2 или 3)
+    """
     match mode:
         case 1:
             required_paths = {'symmetric_key', 'public_key', 'secret_key'}
@@ -44,13 +51,13 @@ def json_loader(path: str, mode: int) -> Dict[str, Any]:
                 raise ValueError("Отсутствует параметр 'key_len'")
             if config['key_len'] not in ('128', '192', '256'):
                 raise ValueError("Недопустимая длина ключа. "
-                                 "Допустимые значения: '128', '192', '256'")
+                               "Допустимые значения: '128', '192', '256'")
         case 2:
             required_paths = {'symmetric_key', 'secret_key',
-                              'initial_file', 'encrypted_file'}
+                            'initial_file', 'encrypted_file'}
         case 3:
             required_paths = {'symmetric_key', 'secret_key',
-                              'decrypted_file', 'encrypted_file'}
+                            'decrypted_file', 'encrypted_file'}
             if 'key_len' not in config:
                 raise ValueError("Отсутствует параметр 'key_len'")
         case _:
@@ -60,14 +67,14 @@ def json_loader(path: str, mode: int) -> Dict[str, Any]:
     if missing_fields:
         raise ValueError(f"Отсутствуют обязательные пути: {missing_fields}")
 
-    return config
-
 
 def main() -> None:
     """Основная функция программы."""
     args = setup_arg_parser()
     try:
-        settings = json_loader(args.settings, int(args.mode))
+        settings = json_loader(args.settings)
+        mode = int(args.mode)
+        mode_setup(settings, mode)
         match args.mode:
             case '1':
                 mode_1(settings)
